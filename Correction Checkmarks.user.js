@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      0.1
 // @description  try to take over the world!
-// @author       You
+// @author       Jonas Perkams
 // @match        https://wb.workist.com/job/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=workist.com
 // @grant        none
@@ -28,17 +28,8 @@
             checkBtn.innerHTML = "Copy Results";
             checkBtn.addEventListener('click', function(){copyResults();})
             div.append(checkBtn);
-
-            //setButton();
-        } else { setTimeout(init, 0);}
+        } else {setTimeout(init, 0);}
     }
-    /**function setButton(){
-        var xpath = "//button[text()='Abschließen']";
-        var matchingElement = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-        //matchingElement.addEventListener('click', function(){
-
-        //});
-    }**/
 
     function copyResults(){
         var results = [];
