@@ -13,6 +13,9 @@
     'use strict';
     var corrections;
 
+    //Want to invert the "Can model do it?"-assessment? Change this. (Default: false)
+    var invert = false;
+
     function init(){
         corrections = document.querySelectorAll('.correction');
         if (corrections.length > 0) {
@@ -32,17 +35,23 @@
     }
 
     function copyResults(){
-        var results = [];
+        var resultsChecked = [];
+        var resultsUnchecked = [];
         var resultString = "";
         var jobID = document.location.href.substr(document.location.href.lastIndexOf('/') + 1);
         for(let i = 0; i < corrections.length; i++){
             let checkbox = corrections[i].firstChild;
             if(checkbox.checked){
-                results.push(jobID + ", " + corrections[i].children[1].innerHTML.replace(/\s/g, ''));
+                invert ? resultsChecked.push(jobID + ", " + corrections[i].children[1].innerHTML.replace(/\s/g, '') + ", " + invert) : resultsChecked.push(jobID + ", " + corrections[i].children[1].innerHTML.replace(/\s/g, '') + ", " + !invert);
+            } else {
+                invert ? resultsUnchecked.push(jobID + ", " + corrections[i].children[1].innerHTML.replace(/\s/g, '') + ", " + !invert) : resultsUnchecked.push(jobID + ", " + corrections[i].children[1].innerHTML.replace(/\s/g, '') + ", " + invert);
             }
         }
-        for(let i = 0; i < results.length; i++){
-            resultString += results[i] + "\n";
+        for(let i = 0; i < resultsChecked.length; i++){
+            resultString += resultsChecked[i] + "\n";
+        }
+        for(let i = 0; i < resultsUnchecked.length; i++){
+            resultString += resultsUnchecked[i] + "\n";
         }
 
         navigator.clipboard.writeText(resultString);
