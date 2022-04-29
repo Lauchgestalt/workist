@@ -18,7 +18,7 @@
     var invert = false;
 
     var x = new MutationObserver(function (e) {
-        if (e[0].removedNodes.length > 0 && e[0].removedNodes[0].className == 'word-annotator__correction correction') {
+        if (e[0].removedNodes.length > 0 && (e[0].removedNodes[0].className == 'word-annotator__correction correction' || e[0].removedNodes[0].className == "assistance__main")) {
             try {
                 document.getElementById("checkBtn").remove();
             } catch {
@@ -48,7 +48,9 @@
             checkBtn.addEventListener('click', function(){copyResults();})
             div.append(checkBtn);
 
+            let toObserve = document.querySelector('.page__inner').children[1];
             x.observe(document.querySelector('.word-annotator__corrections'), { childList: true });
+            x.observe(toObserve, { childList: true });
         } else {setTimeout(init, 100);}
     }
 
