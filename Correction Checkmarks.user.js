@@ -12,12 +12,27 @@
 (function() {
     'use strict';
     var corrections;
+    var setMarks = true;
 
     //Want to invert the "Can model do it?"-assessment? Change this. (Default: false)
     var invert = false;
 
+    var x = new MutationObserver(function (e) {
+        if (e[0].removedNodes.length > 0 && e[0].removedNodes[0].className == 'word-annotator__correction correction') {
+            try {
+                document.getElementById("checkBtn").remove();
+            } catch {
+                console.log("No button to delete!");
+            }
+            setMarks = !setMarks;
+            if(setMarks) init();
+        }
+    });
+
     function init(){
+        console.log("Setting Marks");
         corrections = document.querySelectorAll('.correction');
+        let checkBtn = document.getElementById("checkBtn");
         if (corrections.length > 0) {
             for(let i = 0; i < corrections.length; i++){
                 let checkmark = document.createElement('INPUT');
@@ -29,9 +44,12 @@
             let checkBtn = document.createElement('button');
             let div = document.querySelector('.word-annotator__corrections');
             checkBtn.innerHTML = "Copy Results";
+            checkBtn.id = "checkBtn"
             checkBtn.addEventListener('click', function(){copyResults();})
             div.append(checkBtn);
-        } else {setTimeout(init, 0);}
+
+            x.observe(document.querySelector('.word-annotator__corrections'), { childList: true });
+        } else {setTimeout(init, 100);}
     }
 
     function copyResults(){
@@ -57,6 +75,8 @@
         navigator.clipboard.writeText(resultString);
         alert("Copied results to Clipboard. Paste into Google Sheet, select dropdown, split into columns");
     }
+
+
 
     init();
 })();
