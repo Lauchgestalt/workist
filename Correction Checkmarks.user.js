@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Correction Checkmarks
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.2
 // @description  try to take over the world!
 // @author       Jonas Perkams
 // @match        https://wb.workist.com/job/*
@@ -13,6 +13,8 @@
     'use strict';
     var corrections;
     var setMarks = true;
+    var checked = [];
+    var initDone = false;
 
     //Want to invert the "Can model do it?"-assessment? Change this. (Default: false)
     var invert = false;
@@ -30,15 +32,29 @@
     });
 
     function init(){
-        console.log("Setting Marks");
         corrections = document.querySelectorAll('.correction');
         let checkBtn = document.getElementById("checkBtn");
         if (corrections.length > 0) {
             for(let i = 0; i < corrections.length; i++){
                 let checkmark = document.createElement('INPUT');
+                if (!initDone) {
+                    checked[i] = false;
+                } else if (checked[i]) {
+                    checkmark.checked = true;
+                }
                 checkmark.setAttribute("type", "checkbox");
+                checkmark.id = i;
                 checkmark.addEventListener('click', function(){event.stopPropagation();})
+                checkmark.addEventListener('change', (event) => {
+                    if (event.currentTarget.checked) {
+                        checked[parseInt(event.srcElement.id)] = true;
+                        console.log(checked);
+                    } else {
+                        checked[parseInt(event.srcElement.id)] = false;
+                    }
+                })
                 corrections[i].prepend(checkmark);
+                console.log(checked);
             }
 
             let checkBtn = document.createElement('button');
@@ -51,6 +67,7 @@
             let toObserve = document.querySelector('.page__inner').children[1];
             x.observe(document.querySelector('.word-annotator__corrections'), { childList: true });
             x.observe(toObserve, { childList: true });
+            initDone = true;
         } else {setTimeout(init, 100);}
     }
 
