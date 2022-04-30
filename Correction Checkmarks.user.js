@@ -44,17 +44,16 @@
                 }
                 checkmark.setAttribute("type", "checkbox");
                 checkmark.id = i;
+                checkmark.classList = "correctionCheck";
                 checkmark.addEventListener('click', function(){event.stopPropagation();})
                 checkmark.addEventListener('change', (event) => {
                     if (event.currentTarget.checked) {
                         checked[parseInt(event.srcElement.id)] = true;
-                        console.log(checked);
                     } else {
                         checked[parseInt(event.srcElement.id)] = false;
                     }
                 })
                 corrections[i].prepend(checkmark);
-                console.log(checked);
             }
 
             let checkBtn = document.createElement('button');
@@ -94,6 +93,18 @@
         navigator.clipboard.writeText(resultString);
         alert("Copied results to Clipboard. Paste into Google Sheet, select dropdown, split into columns");
     }
+
+    function addGlobalStyle(css) {
+        var head, style;
+        head = document.getElementsByTagName('head')[0];
+        if (!head) { return; }
+        style = document.createElement('style');
+        style.type = 'text/css';
+        style.innerHTML = css;
+        head.appendChild(style);
+    }
+
+    addGlobalStyle('.correctionCheck { transform: scale(1.5); }');
 
 
 
