@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Correction Checkmarks
 // @namespace    http://tampermonkey.net/
-// @version      0.2
+// @version      0.3
 // @description  try to take over the world!
 // @author       Jonas Perkams
 // @match        https://wb.workist.com/job/*
@@ -90,8 +90,8 @@
             resultString += resultsUnchecked[i] + "\n";
         }
 
-        navigator.clipboard.writeText(resultString);
-        alert("Copied results to Clipboard. Paste into Google Sheet, select dropdown, split into columns");
+        console.log(resultString);
+        navigator.clipboard.writeText(resultString).then(() => {alert("Copied results to Clipboard. Paste into Google Sheet, select dropdown, split into columns");});
     }
 
     function addGlobalStyle(css) {
